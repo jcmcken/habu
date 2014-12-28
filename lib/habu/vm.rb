@@ -14,22 +14,32 @@ module Habu
     def initialize
       @stack = Stack.new
       @store = 0
+      @running_bytecode = nil
     end
 
     def self.execute(bytes)
       VM.new.execute(bytes)
     end
 
-    def execute(bytes)
-      bytes.each do |byte|
+    def execute(bytecode)
+      @running_bytecode = bytecode
+
+      loop do
+        byte = @running_bytecode.get
+
+        break if byte.nil?
+
         if @store > 0
           @store =- 1
           @stack.push(byte)
           next
         end
+
         LOG.debug("stack: #{@stack.inspect}")
         execute_instruction(byte)
       end
+      @running_bytecode = nil
+
       LOG.debug("stack: #{@stack.inspect}")
       @stack.dup
     end
