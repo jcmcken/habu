@@ -27,6 +27,12 @@ module Habu
       end
     end
 
+    def running?
+      ! @running_bytecode.nil?
+    end
+
+    private
+
     def execute_file(filename)
       execute_bytecode(BytecodeFile.read(filename))
     end
@@ -48,7 +54,6 @@ module Habu
       @stack.dup
     end
 
-    private
 
     def instruction_literal
       @stack.push(@running_bytecode.get)
