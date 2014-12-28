@@ -9,8 +9,6 @@ module Habu
       0x04 => :divide,
     }
 
-    attr_reader :stack
-
     def initialize
       @stack = Stack.new
       @running_bytecode = nil
