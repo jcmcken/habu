@@ -20,7 +20,20 @@ module Habu
       VM.new.execute(bytes)
     end
 
-    def execute(bytecode)
+    def execute(target)
+      case target
+      when String
+        execute_file(target)
+      when Bytecode
+        execute_bytecode(target)
+      end
+    end
+
+    def execute_file(filename)
+      execute_bytecode(BytecodeFile.read(filename))
+    end
+
+    def execute_bytecode(bytecode)
       @running_bytecode = bytecode
 
       loop do
