@@ -13,7 +13,6 @@ module Habu
 
     def initialize
       @stack = Stack.new
-      @store = 0
       @running_bytecode = nil
     end
 
@@ -29,12 +28,6 @@ module Habu
 
         break if byte.nil?
 
-        if @store > 0
-          @store =- 1
-          @stack.push(byte)
-          next
-        end
-
         LOG.debug("stack: #{@stack.inspect}")
         execute_instruction(byte)
       end
@@ -46,12 +39,8 @@ module Habu
 
     private
 
-    def store(number = 1)
-      @store = number
-    end
-
     def instruction_literal
-      store(1)
+      @stack.push(@running_bytecode.get)
     end
 
     def instruction_add
